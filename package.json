@@ -8,21 +8,23 @@
     "jshint": "^2.9.4"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "bower": "*",
+    "del": "*",
     "gulp": "*",
-    "gulp-util": "*",
+    "gulp-babel": "^7.0.0",
     "gulp-concat": "*",
+    "gulp-connect": "*",
     "gulp-download": "*",
-    "gulp-rename": "*",
+    "gulp-jshint": "*",
     "gulp-minify-css": "*",
     "gulp-minify-html": "*",
     "gulp-processhtml": "*",
-    "gulp-jshint": "*",
-    "gulp-uglify": "*",
-    "gulp-connect": "*",
+    "gulp-rename": "*",
+    "gulp-uglify": "^1.5.4",
+    "gulp-util": "*",
     "gulp-watch": "*",
-    "tiny-lr": "*",
-    "del": "*"
+    "tiny-lr": "*"
   },
   "scripts": {
     "post-install": "node ./node_modules/bower/bin/bower install",

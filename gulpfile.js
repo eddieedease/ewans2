@@ -11,6 +11,9 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     paths;
 
+var gutil = require('gulp-util');
+
+   
 paths = {
     assets: 'src/assets/**/*',
     css: 'src/css/*.css',
@@ -44,7 +47,8 @@ gulp.task('uglify', ['clean', 'lint'], function() {
         .pipe(uglify({
             outSourceMaps: false
         }))
-        .pipe(gulp.dest(paths.dist));
+        .pipe(gulp.dest(paths.dist))
+        .on('error', gutil.log);
 });
 
 gulp.task('minifycss', ['clean'], function() {
@@ -57,7 +61,7 @@ gulp.task('minifycss', ['clean'], function() {
             suffix: '.min'
         }))
         .pipe(gulp.dest(paths.dist))
-        .on('error', gutil.log);
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
 });
 
 gulp.task('processhtml', ['clean'], function() {
@@ -71,14 +75,14 @@ gulp.task('minifyhtml', ['clean'], function() {
     gulp.src('dist/index.html')
         .pipe(minifyhtml())
         .pipe(gulp.dest(paths.dist))
-        .on('error', gutil.log);
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
 });
 
 gulp.task('lint', function() {
     gulp.src(paths.js)
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
-        .on('error', gutil.log);
+        .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
 });
 
 gulp.task('html', function() {
