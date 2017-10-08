@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     function Screensaver() {
@@ -35,13 +35,13 @@
 
     var tweenrecyclespeel;
     var recyclespeel;
-   
+
     var kiesspelers;
     var selectie;
 
     var readytoplay = false;
 
-     var letsplay;
+    var letsplay;
     var letsplaytween;
     var kiesspelerstween;
 
@@ -72,40 +72,43 @@
     var text;
 
     Screensaver.prototype = {
-        create: function () {
+        create: function() {
             credit = localStorage.getItem('credits');
-              // TODO: Video
-            
+
+            credit--;
+            localStorage.setItem('credits', credit);
+            // TODO: Video
+
             /*canvas = this.game.add.bitmapData(1000, 563);
-            canvas.addToWorld();
+                canvas.addToWorld();
             
-            for (var i = 0; i < max; i++) {
-              xx[i] = Math.floor(Math.random() * 1000) - 400;
-              yy[i] = Math.floor(Math.random() * 563) - 300;
-              zz[i] = Math.floor(Math.random() * 1700) - 100;
-            }
+                for (var i = 0; i < max; i++) {
+                  xx[i] = Math.floor(Math.random() * 1000) - 400;
+                  yy[i] = Math.floor(Math.random() * 563) - 300;
+                  zz[i] = Math.floor(Math.random() * 1700) - 100;
+                }
 
-            for (var n = 0; n < max; n++) {
-              xx2[n] = Math.floor(Math.random() * 1000) - 400;
-              yy2[n] = Math.floor(Math.random() * 563) - 300;
-              zz2[n] = Math.floor(Math.random() * 1700) - 100;
-            }
+                for (var n = 0; n < max; n++) {
+                  xx2[n] = Math.floor(Math.random() * 1000) - 400;
+                  yy2[n] = Math.floor(Math.random() * 563) - 300;
+                  zz2[n] = Math.floor(Math.random() * 1700) - 100;
+                }
 
-            for (var b = 0; b < max; b++) {
-              xx3[b] = Math.floor(Math.random() * 1000) - 400;
-              yy3[b] = Math.floor(Math.random() * 563) - 300;
-              zz3[b] = Math.floor(Math.random() * 1700) - 100;
-            }*/
+                for (var b = 0; b < max; b++) {
+                  xx3[b] = Math.floor(Math.random() * 1000) - 400;
+                  yy3[b] = Math.floor(Math.random() * 563) - 300;
+                  zz3[b] = Math.floor(Math.random() * 1700) - 100;
+                }*/
 
             levelsound = this.game.add.audio('levelsound');
-            
+
             this.game.stage.backgroundColor = "#000";
 
             video = this.game.add.video('introfilm');
             video.stop();
             video.play(true);
 
-            
+
             sprite = video.addToWorld(0, 0, 0, 0);
             sprite.x = 0;
             sprite.y = 0;
@@ -143,7 +146,7 @@
             readytoplay = false;
             this.game.multiplay = false;
 
-          
+
 
 
 
@@ -190,7 +193,7 @@
 
         },
 
-        creditadd: function () {
+        creditadd: function() {
 
 
 
@@ -204,13 +207,13 @@
 
             this.game.time.events.add(Phaser.Timer.SECOND * 3, this.creditgone, this);
         },
-        creditgone: function () {
+        creditgone: function() {
             this.game.time.events.remove(Phaser.Timer.SECOND * 3, this.creditgone, this);
 
             this.game.state.start('menu', true, false);
         },
 
-        update: function () {
+        update: function() {
 
             if (cursors.left.isDown) {
                 //  Move to the left
@@ -275,7 +278,7 @@
 */
 
         },
-        onDown: function (key) {
+        onDown: function(key) {
             console.log(key.keyCode);
 
             if (key.keyCode === 73) {
@@ -291,19 +294,25 @@
                         y: -200
                     }, 1500, Phaser.Easing.Bounce.Out, true);
                     letsplaytween.onComplete.add(this.letplaysdone, this);
+                    this.game.aantalafval++;
+                    var aantalafval = this.game.aantalafval;
+
+
+                    localStorage.setItem('aantalafval', aantalafval);
+
                 }
             }
 
             if (key.keyCode === 90 && readytoplay === true) {
                 video.stop();
-                 this.game.state.start('platformer', true, false);
-                 
+                this.game.state.start('platformer', true, false);
+
             }
 
 
-           
+
         },
-        letplaysdone: function () {
+        letplaysdone: function() {
             levelsound.play();
             console.log("comes here");
             kiesspelers.alpha = 1;
@@ -312,11 +321,13 @@
             }, 1000, Phaser.Easing.Bounce.Out, true);
             kiesspelerstween.onComplete.add(this.kiesspelersdone, this);
         },
-        kiesspelersdone: function () {
+        kiesspelersdone: function() {
             console.log("comes here");
             selectie.alpha = 1;
 
             readytoplay = true;
+
+
 
         }
 

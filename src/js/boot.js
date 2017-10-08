@@ -33,12 +33,17 @@
 
             this.game.credits = localStorage.getItem('credits');
             this.game.aantalphones = localStorage.getItem('aantalphones');
-            console.log(this.game.aantalphones);
-            console.log(this.game.credits);
+            this.game.aantalafval = localStorage.getItem('aantalafval');
 
+            console.log("Aantal afval ingegooid is:" + this.game.aantalafval);
             if (this.game.credits === null) {
                 var cred = 0;
                 localStorage.setItem('credits', cred);
+            }
+
+            if (this.game.aantalafval === null) {
+                var aantalafval = 0;
+                localStorage.setItem('aantalafval', aantalafval);
             }
 
             if (this.game.aantalphones === null) {
