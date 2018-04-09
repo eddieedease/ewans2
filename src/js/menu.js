@@ -15,6 +15,8 @@
     var keyz;
     var keyx;
     var keyi;
+
+    
     var player;
     var cursors;
     var creditnum;
