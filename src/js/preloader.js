@@ -55,7 +55,7 @@
             this.load.image('levelup', 'assets/levelup.png');
 
             this.load.image('currentletter', 'assets/currentletter.png');
-            this.load.image('diamond', 'assets/diamond.png');
+            // this.load.image('diamond', 'assets/diamond.png');
             //preload menu
 
             this.load.spritesheet('crp1', 'assets/capred.png', 147, 147);
@@ -71,7 +71,7 @@
             this.load.image('scorebg', 'assets/scorebg.png');
             this.load.image('scoredudes', 'assets/scoredudes.png');
 
-            this.load.image('ground', 'assets/ground.png');
+           
             this.load.image('gameover', 'assets/gameover.png');
             this.load.spritesheet('enemy', 'assets/enemy.png', 50, 96);
             this.load.spritesheet('coin', 'assets/coin.png', 50, 50);

@@ -183,6 +183,7 @@
     var p2w2press = false;
     var p2w3press = false;
 
+
     Platformer.prototype = {
         create: function() {
 
@@ -251,7 +252,7 @@
 
             traintween.to({
                 x: 1500
-            }, 2000, Phaser.Easing.Linear.None);
+            }, 3500, Phaser.Easing.Linear.None);
             //traintween.onComplete.add(firstTween, this);
             traintween.start();
 
@@ -480,6 +481,7 @@
 
             over = this.game.add.sprite(100, 240, 'gameoverr');
             over.alpha = 0;
+
 
 
         },

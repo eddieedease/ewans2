@@ -71,6 +71,10 @@
 
     var text;
 
+    // timer
+    var timerdisplay2
+    var time2select = 10;
+
     Screensaver.prototype = {
         create: function() {
             credit = localStorage.getItem('credits');
@@ -189,6 +193,12 @@
             // creditadd.onDown.add(this.creditadd, this);
 
 
+            // setting up timer
+            // adding timer
+            timerdisplay2 = this.game.add.bitmapText(this.game.world.centerX + 6,this.game.world.height - 40, 'scorefont', 'testtimer', 45);
+            timerdisplay2.anchor.setTo(0.5, 0.5);
+            timerdisplay2.visible = true;
+
 
 
         },
@@ -210,20 +220,20 @@
         creditgone: function() {
             this.game.time.events.remove(Phaser.Timer.SECOND * 3, this.creditgone, this);
 
-            this.game.state.start('menu', true, false);
+            //this.game.state.start('menu', true, false);
         },
 
         update: function() {
 
             if (cursors.left.isDown) {
                 //  Move to the left
-                this.game.state.start('menu', true, false);
+                // this.game.state.start('menu', true, false);
                 selectie.x = 80;
                 this.game.multiplay = false;
             }
             if (cursors.right.isDown) {
                 //  Move to the left
-                this.game.state.start('menu', true, false);
+                // this.game.state.start('menu', true, false);
                 selectie.x = 550;
                 this.game.multiplay = true;
             }
