@@ -202,10 +202,18 @@
         timerLoop: function () {
            if (counter === 0 ) {
                // TODO need some logic to go through nexxt screen but keep current selection
-               video.stop();
+               //video.stop();
+               timerdisplay2.setText(" ");
                 this.game.time.events.remove(chooseloop);
-                this.game.state.start('platformer', true, false);
-               return;
+                counter = 45;
+                timerdisplay2.visible = false;
+                selectie.alpha = 0;
+                kiesspelers.alpha = 0;
+                letsplay.alpha = 0;
+                animationstarted = false;
+                
+                blockInsert = false;
+                //this.game.state.start('platformer', true, false);
            }
 
            if (counter > 0) {
@@ -287,6 +295,7 @@
             if (key.keyCode === 73 && blockInsert === false) {
                 blockInsert = true ;
                 if (animationstarted === false) {
+                    timerdisplay2.visible = true;
                     animationstarted = true;
                     this.game.stage.backgroundColor = "#fff";
                     letsplay.alpha = 1;
