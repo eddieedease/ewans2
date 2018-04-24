@@ -11,6 +11,7 @@
     var keya;
     var keys;
     var keyd;
+    var keyh;
     var keyz;
     var keyx;
     var keyi;
@@ -73,37 +74,26 @@
 
     // timer
     var timerdisplay2
-    var time2select = 10;
+    var counter = 45;
+
+    var chooseloop;
+
+    // local storage warning img
+    var warning;
+    var resetvalue = 0;
+
+    // boolean for storing waste insert is triggered
+    var blockInsert = false;
+
 
     Screensaver.prototype = {
         create: function() {
             credit = localStorage.getItem('credits');
 
             credit--;
+            blockInsert = false;
             localStorage.setItem('credits', credit);
-            // TODO: Video
-
-            /*canvas = this.game.add.bitmapData(1000, 563);
-                canvas.addToWorld();
-            
-                for (var i = 0; i < max; i++) {
-                  xx[i] = Math.floor(Math.random() * 1000) - 400;
-                  yy[i] = Math.floor(Math.random() * 563) - 300;
-                  zz[i] = Math.floor(Math.random() * 1700) - 100;
-                }
-
-                for (var n = 0; n < max; n++) {
-                  xx2[n] = Math.floor(Math.random() * 1000) - 400;
-                  yy2[n] = Math.floor(Math.random() * 563) - 300;
-                  zz2[n] = Math.floor(Math.random() * 1700) - 100;
-                }
-
-                for (var b = 0; b < max; b++) {
-                  xx3[b] = Math.floor(Math.random() * 1000) - 400;
-                  yy3[b] = Math.floor(Math.random() * 563) - 300;
-                  zz3[b] = Math.floor(Math.random() * 1700) - 100;
-                }*/
-
+         
             levelsound = this.game.add.audio('levelsound');
 
             this.game.stage.backgroundColor = "#000";
@@ -117,29 +107,20 @@
             sprite.x = 0;
             sprite.y = 0;
 
+            // timer for choosing teams
+            counter = 45;
+
             animationstarted = false;
             is1player = true;
             recyclespeel = this.game.add.sprite(70, 200, 'recyclespeel');
             recyclespeel.alpha = 0;
-            //  Here we create a tween on the sprite created above
-            // tweenrecyclespeel = this.game.add.tween(recyclespeel).to({
-            //     alpha: 1
-            // }, 2000, "Linear", true, 0, -1);
-
-
-            //  The object defines the properties to tween.
-            //  In this case it will move to x 800
-            //  The 5000 is the duration in ms - 5000ms = 5 seconds
-            //tweenrecyclespeel.yoyo(true, 3000);
-            //text = this.game.add.bitmapText(this.game.width / 2, this.game.height / 5, 'scorefont', 'Gooi het afval in de goede container', 40);
-            //text.align = "center";
-            // text.anchor.set(0.5);
-
+        
 
             letsplay = this.game.add.sprite(200, 180, 'letsplay');
             letsplay.alpha = 0;
 
-            kiesspelers = this.game.add.sprite(90, 120, 'kiesspelers');
+            kiesspelers = this.game.add.sprite(this.game.width/2, this.game.height/2, 'kiesspelers');
+            kiesspelers.anchor.setTo(0.5, 0.5);
             kiesspelers.alpha = 0;
 
             selectie = this.game.add.sprite(80, 140, 'selectie');
@@ -157,64 +138,59 @@
             cursors = this.game.input.keyboard.createCursorKeys();
 
 
-            // keyq = this.input.keyboard.addKey(Phaser.Keyboard.Q);
-            // keyw = this.input.keyboard.addKey(Phaser.Keyboard.W);
-            // keye = this.input.keyboard.addKey(Phaser.Keyboard.E);
-            // keya = this.input.keyboard.addKey(Phaser.Keyboard.A);
-            // keys = this.input.keyboard.addKey(Phaser.Keyboard.S);
-            // keyd = this.input.keyboard.addKey(Phaser.Keyboard.D);
             keyz = this.input.keyboard.addKey(Phaser.Keyboard.Z);
-            // keyx = this.input.keyboard.addKey(Phaser.Keyboard.X);
             keyi = this.input.keyboard.addKey(Phaser.Keyboard.I);
-            // keyo = this.input.keyboard.addKey(Phaser.Keyboard.O);
-            // keyp = this.input.keyboard.addKey(Phaser.Keyboard.P);
+       
+         
+            keyh = this.input.keyboard.addKey(Phaser.Keyboard.H);
+            keyh.onDown.add(this.resetLocalStorage, this);
 
 
-
-
-
-            // keyq.onDown.add(this.onDown, this);
-            // keyw.onDown.add(this.onDown, this);
-            // keye.onDown.add(this.onDown, this);
-            // keya.onDown.add(this.onDown, this);
-            // keys.onDown.add(this.onDown, this);
-            // keyd.onDown.add(this.onDown, this);
             keyz.onDown.add(this.onDown, this);
-            // keyx.onDown.add(this.onDown, this);
             keyi.onDown.add(this.onDown, this);
-            // keyo.onDown.add(this.onDown, this);
-            // keyp.onDown.add(this.onDown, this);
-            //cursors.onDown.add(this.onDown, this);
 
 
-
-
-            // creditadd = this.input.keyboard.addKey(Phaser.Keyboard.O);
-            // creditadd.onDown.add(this.creditadd, this);
-
-
-            // setting up timer
-            // adding timer
-            timerdisplay2 = this.game.add.bitmapText(this.game.world.centerX + 6,this.game.world.height - 40, 'scorefont', 'testtimer', 45);
+            timerdisplay2 = this.game.add.bitmapText(this.game.world.centerX + 6, 40, 'scorefont', 'testtimer', 45);
             timerdisplay2.anchor.setTo(0.5, 0.5);
             timerdisplay2.visible = true;
+            timerdisplay2.setText(" ");
+            
 
+            // WARNING IMG
+            warning = this.game.add.image(this.game.width / 8 * 4, 300, 'warning');
+            warning.anchor.set(0.5, 0.5);
+            warning.visible = false;
+            
 
+        },
+        resetLocalStorage : function (){
+            console.log('check');
+            if (resetvalue === 0){
+                this.game.time.events.add(Phaser.Timer.SECOND * 6, this.timerresetend, this);
+            }
+           
+            resetvalue++;
 
+            if (resetvalue === 4){
+                warning.visible = true;
+            } else if (resetvalue === 5){
+                warning.visible = false;
+                resetvalue = 0;
+                localStorage.clear();
+                
+                location.reload();
+            }
+        },
+        timerresetend : function () {
+            resetvalue = 0;
+            warning.visible = false;
         },
 
         creditadd: function() {
-
-
-
-
             credit = parseInt(credit) + 3;
-
             localStorage.setItem('credits', credit);
-
             this.game.aantalphones = this.game.aantalphones + 1;
             localStorage.setItem('aantalphones', this.game.aantalphones);
-
             this.game.time.events.add(Phaser.Timer.SECOND * 3, this.creditgone, this);
         },
         creditgone: function() {
@@ -222,6 +198,23 @@
 
             //this.game.state.start('menu', true, false);
         },
+
+        timerLoop: function () {
+           if (counter === 0 ) {
+               // TODO need some logic to go through nexxt screen but keep current selection
+               video.stop();
+                this.game.time.events.remove(chooseloop);
+                this.game.state.start('platformer', true, false);
+               return;
+           }
+
+           if (counter > 0) {
+            counter --;
+            timerdisplay2.setText(counter);
+           }
+        }
+
+        ,
 
         update: function() {
 
@@ -291,14 +284,11 @@
         onDown: function(key) {
             console.log(key.keyCode);
 
-            if (key.keyCode === 73) {
+            if (key.keyCode === 73 && blockInsert === false) {
+                blockInsert = true ;
                 if (animationstarted === false) {
                     animationstarted = true;
-                    // THIS WILL ENABLE MULTIPLAYER
-                    //video.stop();
-
                     this.game.stage.backgroundColor = "#fff";
-                    // NOTE starting the game
                     letsplay.alpha = 1;
                     letsplaytween = this.game.add.tween(letsplay).from({
                         y: -200
@@ -306,8 +296,6 @@
                     letsplaytween.onComplete.add(this.letplaysdone, this);
                     this.game.aantalafval++;
                     var aantalafval = this.game.aantalafval;
-
-
                     localStorage.setItem('aantalafval', aantalafval);
 
                 }
@@ -315,8 +303,9 @@
 
             if (key.keyCode === 90 && readytoplay === true) {
                 video.stop();
+                this.game.time.events.remove(chooseloop);
+                blockInsert = false;
                 this.game.state.start('platformer', true, false);
-
             }
 
 
@@ -327,18 +316,16 @@
             console.log("comes here");
             kiesspelers.alpha = 1;
             kiesspelerstween = this.game.add.tween(kiesspelers).to({
-                y: 80
+                y: this.game.height/2
             }, 1000, Phaser.Easing.Bounce.Out, true);
             kiesspelerstween.onComplete.add(this.kiesspelersdone, this);
+            chooseloop = this.game.time.events.loop(Phaser.Timer.SECOND, this.timerLoop, this);
         },
         kiesspelersdone: function() {
             console.log("comes here");
             selectie.alpha = 1;
-
             readytoplay = true;
-
-
-
+            // this.game.time.events.remove(chooseloop);
         }
 
 

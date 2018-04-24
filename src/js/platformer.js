@@ -183,6 +183,9 @@
     var p2w2press = false;
     var p2w3press = false;
 
+    var p1jumpblock = false
+    var p2jumpblock = false;
+
 
     Platformer.prototype = {
         create: function() {
@@ -396,10 +399,13 @@
 
             //waste1 = this.game.add.sprite(200, 0, 'duck1');
             waste1.scale.setTo(0.7, 0.7);
+            waste1.anchor.setTo(0.5,0.5);
             //waste2 = this.game.add.sprite(400, 0, 'duck2');
             waste2.scale.setTo(0.7, 0.7);
+            waste2.anchor.setTo(0.5,0.5);
             // waste3 = this.game.add.sprite(800, 0, 'duck3');
             waste3.scale.setTo(0.7, 0.7);
+            waste3.anchor.setTo(0.5,0.5);
 
             waste1.kill();
             waste3.kill();
@@ -516,14 +522,18 @@
                 }
 
                 if (p1w1press === true && carry1 !== true) {
-                    console.log("check")
+                    console.log("check");
+                    carry1 = true;
+                    p1jumpblock = true;
                     console.log("GRABBBINGGGGG");
                     waste1vast = "p1";
-                    waste1.body.gravity.y = 200;
-                    waste1.x = platplayer1.x;
-                    waste1.y = platplayer1.y - 40;
+                   
+                    waste1.body.gravity.y = 0;
+                    waste1.x = platplayer1.x + 20;
+                    waste1.y = platplayer1.y;
                 } else {
                     carry1 = false;
+                    p1jumpblock = false;
                 }
             }, null, this);
 
@@ -539,13 +549,16 @@
                         recyclehier.visible = true;
                     }
 
+                    p1jumpblock = true;
                     carry1 = true;
                     waste2vast = "p1";
                     console.log("GRABBBINGGGGG");
-                    waste2.x = platplayer1.x;
-                    waste2.y = platplayer1.y - 40;
+                    waste2.body.gravity.y = 0;
+                    waste2.x = platplayer1.x + 20;
+                    waste2.y = platplayer1.y;
                 } else {
                     carry1 = false;
+                    p1jumpblock = false;
                 }
 
             }, null, this);
@@ -559,11 +572,15 @@
                 if (p1w3press === true && carry1 !== true) {
                     carry1 = true;
                     waste3vast = "p1";
+                    p1jumpblock = true;
                     console.log("GRABBBINGGGGG");
-                    waste3.x = platplayer1.x;
-                    waste3.y = platplayer1.y - 40;
+                   
+                    waste3.body.gravity.y = 0;
+                    waste3.x = platplayer1.x + 20;
+                    waste3.y = platplayer1.y;
                 } else {
                     carry1 = false;
+                    p1jumpblock = false;
                 }
             }, null, this);
 
@@ -647,14 +664,16 @@
                         p2w1press = true
                     }
                     if (p2w1press === true && carry2 !== true) {
-
                         carry2 = true;
                         waste1vast = "p2";
                         console.log("GRABBBINGGGGG");
-                        waste1.x = platplayer2.x;
-                        waste1.y = platplayer2.y - 40;
+                        p2jumpblock
+                        waste1.body.gravity.y = 0;
+                        waste1.x = platplayer2.x + 20;
+                        waste1.y = platplayer2.y;
                     } else {
                         carry2 = false;
+                        p2jumpblock = false;
                     }
                 }, null, this);
 
@@ -671,12 +690,14 @@
                         carry2 = true;
                         waste2vast = "p2";
                         console.log("GRABBBINGGGGG");
-                        waste2.x = platplayer2.x;
-                        waste2.y = platplayer2.y - 40;
+                        p2jumpblock = true;
+                        waste2.body.gravity.y = 0;
+                        waste2.x = platplayer2.x + 20;
+                        waste2.y = platplayer2.y;
                     } else {
                         carry2 = false;
+                        p2jumpblock = false;
                     }
-
                 }, null, this);
 
                 this.physics.arcade.overlap(platplayer2, waste3, function(_player, _waste) {
@@ -688,10 +709,13 @@
                         carry2 = true;
                         waste3vast = "p2";
                         console.log("GRABBBINGGGGG");
-                        waste3.x = platplayer2.x;
-                        waste3.y = platplayer2.y - 40;
+                        p2jumpblock = true;
+                        waste3.body.gravity.y = 0;
+                        waste3.x = platplayer2.x + 20;
+                        waste3.y = platplayer2.y;
                     } else {
                         carry2 = false;
+                        p2jumpblock = false;
                     }
                 }, null, this);
 
@@ -777,7 +801,8 @@
             }
             //  Allow the platplayer1 to jump if they are touching the ground.
             if (p1jump.isDown && platplayer1.body.touching.down) {
-                platplayer1.body.velocity.y = -450;
+                    platplayer1.body.velocity.y = -450;
+                    console.log("p1 jumping");
             }
 
             if (platplayer1.body.touching.down === false && p1jump.isDown) {
@@ -1197,6 +1222,8 @@
                     }
 
                     waste1.kill();
+                    waste1.body.gravity.y = 200;
+                    
                     wastecollected++;
                     break;
                 case "sspapier":
@@ -1216,6 +1243,8 @@
                         scoreTextp2.text = 'Score P2:\n' + scorep2;
                     }
                     waste2.kill();
+                    waste2.body.gravity.y = 200;
+                   
 
                     // tutorial
                     if (tutorial === true) {
@@ -1251,6 +1280,8 @@
                         scoreTextp2.text = 'Score P2:\n' + scorep2;
                     }
                     waste3.kill();
+                    waste3.body.gravity.y = 200;
+                   
                     wastecollected++;
                     stoplicht3.frame = aantaleten;
                     if (aantaleten === 3) {
@@ -1591,7 +1622,8 @@
 
         render: function() {
             // this.game.debug.body(platplayer1);
-            //this.game.debug.body(platplayer1);
+            // this.game.debug.body(waste2);
+            
 
         }
     };

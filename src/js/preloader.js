@@ -53,6 +53,7 @@
             //this.load.audio('alarm', ['assets/audio/alarm.ogg']);
             this.load.bitmapFont('scorefont', 'assets/font/font.png', 'assets/font/font.fnt');
             this.load.image('levelup', 'assets/levelup.png');
+            this.load.image('warning', 'assets/warning.png');
 
             this.load.image('currentletter', 'assets/currentletter.png');
             // this.load.image('diamond', 'assets/diamond.png');
