@@ -116,7 +116,8 @@
             recyclespeel.alpha = 0;
         
 
-            letsplay = this.game.add.sprite(200, 180, 'letsplay');
+            letsplay = this.game.add.sprite(this.game.width/2, this.game.height/2, 'letsplay');
+            letsplay.anchor.setTo(0.5,0.5);
             letsplay.alpha = 0;
 
             kiesspelers = this.game.add.sprite(this.game.width/2, this.game.height/2, 'kiesspelers');
