@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     function Platformer() {}
@@ -19,8 +19,8 @@
     var platplayer1;
     var platplayer2;
 
-    var carry1;
-    var carry2;
+    var carry1 = false;
+    var carry2 = false;
 
     var waste1;
     var waste2;
@@ -188,7 +188,7 @@
 
 
     Platformer.prototype = {
-        create: function() {
+        create: function () {
 
             credit = localStorage.getItem('credits');
 
@@ -399,13 +399,13 @@
 
             //waste1 = this.game.add.sprite(200, 0, 'duck1');
             waste1.scale.setTo(0.7, 0.7);
-            waste1.anchor.setTo(0.5,0.5);
+            waste1.anchor.setTo(0.5, 0.5);
             //waste2 = this.game.add.sprite(400, 0, 'duck2');
             waste2.scale.setTo(0.7, 0.7);
-            waste2.anchor.setTo(0.5,0.5);
+            waste2.anchor.setTo(0.5, 0.5);
             // waste3 = this.game.add.sprite(800, 0, 'duck3');
             waste3.scale.setTo(0.7, 0.7);
-            waste3.anchor.setTo(0.5,0.5);
+            waste3.anchor.setTo(0.5, 0.5);
 
             waste1.kill();
             waste3.kill();
@@ -491,7 +491,7 @@
 
 
         },
-        creditadd: function() {
+        creditadd: function () {
 
             credit = parseInt(credit) + 3;
 
@@ -502,12 +502,12 @@
             valid.visible = true;
             this.game.time.events.add(Phaser.Timer.SECOND * 3, this.creditgone, this);
         },
-        creditgone: function() {
+        creditgone: function () {
             this.game.time.events.remove(Phaser.Timer.SECOND * 3, this.creditgone, this);
             valid.visible = false;
         },
 
-        update: function() {
+        update: function () {
 
             if (tutorial === true) {
                 waste2.frame = 0;
@@ -515,8 +515,44 @@
                 pakop.y = waste2.y - 30;
             }
 
+
+
+
+
+
+
+            // after level 2 enable the enemy
+            if (enemycreated === true) {
+                enemy1.animations.play('munch');
+                enemy1.body.velocity.x = enemyspeed1;
+                enemy1.outOfBoundsKill = true;
+
+                enemy2.animations.play('munch');
+                enemy2.body.velocity.x = enemyspeed2;
+                enemy2.outOfBoundsKill = true;
+                this.game.physics.arcade.collide(enemy1, platforms);
+                this.game.physics.arcade.collide(enemy2, platforms);
+                this.game.physics.arcade.overlap(platplayer1, enemy1, this.hitenemy, null, this);
+                this.game.physics.arcade.overlap(platplayer1, enemy2, this.hitenemy, null, this);
+            }
+
+
+            //  Allow the platplayer1 to jump if they are touching the ground.
+
+
+            //  Collide the platplayer1 and the stars with the platforms
+            this.game.physics.arcade.collide(platplayer1, platforms);
+
+            if (p1jump.isDown && platplayer1.body.touching.down) {
+                platplayer1.body.velocity.y = -450;
+                console.log("p1 jumzping");
+            }
+
+
+
+
             // NOTE trying to grab something
-            this.physics.arcade.overlap(platplayer1, waste1, function(_player, _waste) {
+            this.physics.arcade.overlap(platplayer1, waste1, function (_player, _waste) {
                 if (p1grab.isDown) {
                     p1w1press = true
                 }
@@ -527,7 +563,7 @@
                     p1jumpblock = true;
                     console.log("GRABBBINGGGGG");
                     waste1vast = "p1";
-                   
+
                     waste1.body.gravity.y = 0;
                     waste1.x = platplayer1.x + 20;
                     waste1.y = platplayer1.y;
@@ -537,7 +573,7 @@
                 }
             }, null, this);
 
-            this.physics.arcade.overlap(platplayer1, waste2, function(_player, _waste) {
+            this.physics.arcade.overlap(platplayer1, waste2, function (_player, _waste) {
 
                 if (p1grab.isDown) {
                     p1w2press = true
@@ -563,7 +599,7 @@
 
             }, null, this);
 
-            this.physics.arcade.overlap(platplayer1, waste3, function(_player, _waste) {
+            this.physics.arcade.overlap(platplayer1, waste3, function (_player, _waste) {
 
                 if (p1grab.isDown) {
                     p1w3press = true
@@ -574,7 +610,7 @@
                     waste3vast = "p1";
                     p1jumpblock = true;
                     console.log("GRABBBINGGGGG");
-                   
+
                     waste3.body.gravity.y = 0;
                     waste3.x = platplayer1.x + 20;
                     waste3.y = platplayer1.y;
@@ -583,30 +619,6 @@
                     p1jumpblock = false;
                 }
             }, null, this);
-
-
-
-
-
-            // after level 2 enable the enemy
-            if (enemycreated === true) {
-                enemy1.animations.play('munch');
-                enemy1.body.velocity.x = enemyspeed1;
-                enemy1.outOfBoundsKill = true;
-
-                enemy2.animations.play('munch');
-                enemy2.body.velocity.x = enemyspeed2;
-                enemy2.outOfBoundsKill = true;
-                this.game.physics.arcade.collide(enemy1, platforms);
-                this.game.physics.arcade.collide(enemy2, platforms);
-                this.game.physics.arcade.overlap(platplayer1, enemy1, this.hitenemy, null, this);
-                this.game.physics.arcade.overlap(platplayer1, enemy2, this.hitenemy, null, this);
-            }
-
-
-
-            //  Collide the platplayer1 and the stars with the platforms
-            this.game.physics.arcade.collide(platplayer1, platforms);
 
             //this.game.physics.arcade.collide(platplayer2, enemy1);
             //this.game.physics.arcade.collide(platplayer1, enemy1);
@@ -655,10 +667,29 @@
             }
 
 
+
+
             if (this.game.multiplay === true) {
 
+
+
+
+                // TODO Player 2
+                this.game.physics.arcade.collide(platplayer2, platforms);
+                this.game.physics.arcade.collide(platplayer2, platplayer1);
+                this.game.physics.arcade.overlap(platplayer2, stars, this.collectStar2, null, this);
+                this.game.physics.arcade.overlap(platplayer2, enemy1, this.hitenemy, null, this);
+                this.game.physics.arcade.overlap(platplayer2, enemy2, this.hitenemy, null, this);
+
+
+                //  Allow the platplayer1 to jump if they are touching the ground.
+                if (p2up.isDown && platplayer2.body.touching.down) {
+                    platplayer2.body.velocity.y = -450;
+                }
+
+
                 // NOTE trying to grab something
-                this.physics.arcade.overlap(platplayer2, waste1, function(_player, _waste) {
+                this.physics.arcade.overlap(platplayer2, waste1, function (_player, _waste) {
 
                     if (p2grab.isDown) {
                         p2w1press = true
@@ -667,7 +698,7 @@
                         carry2 = true;
                         waste1vast = "p2";
                         console.log("GRABBBINGGGGG");
-                        p2jumpblock
+                        p2jumpblock = true;
                         waste1.body.gravity.y = 0;
                         waste1.x = platplayer2.x + 20;
                         waste1.y = platplayer2.y;
@@ -677,7 +708,7 @@
                     }
                 }, null, this);
 
-                this.physics.arcade.overlap(platplayer2, waste2, function(_player, _waste) {
+                this.physics.arcade.overlap(platplayer2, waste2, function (_player, _waste) {
 
                     if (p2grab.isDown) {
                         p2w2press = true
@@ -700,7 +731,7 @@
                     }
                 }, null, this);
 
-                this.physics.arcade.overlap(platplayer2, waste3, function(_player, _waste) {
+                this.physics.arcade.overlap(platplayer2, waste3, function (_player, _waste) {
                     if (p2grab.isDown) {
                         p2w3press = true
                     }
@@ -720,12 +751,8 @@
                 }, null, this);
 
 
-                // TODO Player 2
-                this.game.physics.arcade.collide(platplayer2, platforms);
-                this.game.physics.arcade.collide(platplayer2, platplayer1);
-                this.game.physics.arcade.overlap(platplayer2, stars, this.collectStar2, null, this);
-                this.game.physics.arcade.overlap(platplayer2, enemy1, this.hitenemy, null, this);
-                this.game.physics.arcade.overlap(platplayer2, enemy2, this.hitenemy, null, this);
+
+
                 platplayer2.body.velocity.x = 0;
                 if (p2left.isDown) {
                     //  Move to the left
@@ -751,10 +778,6 @@
 
 
                     }
-                }
-                //  Allow the platplayer1 to jump if they are touching the ground.
-                if (p2up.isDown && platplayer2.body.touching.down) {
-                    platplayer2.body.velocity.y = -450;
                 }
 
                 if (platplayer2.body.touching.down === false && p2up.isDown) {
@@ -786,8 +809,6 @@
             } else {
                 //  Stand still
                 platplayer1.animations.stop();
-
-
                 switch (facingp1) {
                     case 'left':
                         platplayer1.frame = 2;
@@ -795,15 +816,10 @@
                     case 'right':
                         platplayer1.frame = 3;
                         break;
-
-
                 }
             }
-            //  Allow the platplayer1 to jump if they are touching the ground.
-            if (p1jump.isDown && platplayer1.body.touching.down) {
-                    platplayer1.body.velocity.y = -450;
-                    console.log("p1 jumping");
-            }
+
+
 
             if (platplayer1.body.touching.down === false && p1jump.isDown) {
                 switch (facingp1) {
@@ -815,15 +831,9 @@
                         break;
                 }
             }
-
-
-
-
-
-
         },
         // NOTE OUR ENDING
-        timerLoop: function() {
+        timerLoop: function () {
             //slidertweento.start();
             counter--;
             timerdisplay.setText(counter);
@@ -840,25 +850,25 @@
 
             }
         },
-        error1: function() {
-            buzzer.play();
-            stopbord1.visible = true;
-        }
+        error1: function () {
+                buzzer.play();
+                stopbord1.visible = true;
+            }
 
-        ,
-        error2: function() {
-            buzzer.play();
-            stopbord2.visible = true
-        }
+            ,
+        error2: function () {
+                buzzer.play();
+                stopbord2.visible = true
+            }
 
-        ,
-        error3: function() {
-            buzzer.play();
-            stopbord3.visible = true
-        }
+            ,
+        error3: function () {
+                buzzer.play();
+                stopbord3.visible = true
+            }
 
-        ,
-        levelup: function() {
+            ,
+        levelup: function () {
             levelsound.play();
             train.x = -1200;
             //traintween.to({x:1500}, 1000,  Phaser.Easing.Linear.None);
@@ -953,11 +963,11 @@
             }
 
         },
-        removelevelup: function() {
+        removelevelup: function () {
             levelup.destroy();
             leveluptween = null;
         },
-        changeledges: function() {
+        changeledges: function () {
             // NOTE add the code for changing ledges
             var randomlegde = this.game.rnd.integerInRange(0, 2);
 
@@ -1018,7 +1028,7 @@
                     break;
             }
         },
-        collectlife: function(platplayer1, life) {
+        collectlife: function (platplayer1, life) {
 
             if (levens1 < 3) {
                 cheering.play();
@@ -1057,7 +1067,7 @@
 
 
         },
-        collectlife2: function(platplayer2, life) {
+        collectlife2: function (platplayer2, life) {
             {
                 //audiocoin.play();
                 // Removes the star from the screen
@@ -1106,7 +1116,7 @@
 
 
 
-        collectStar1: function(platplayer1, star) {
+        collectStar1: function (platplayer1, star) {
             {
                 audiocoin.play();
                 // Removes the star from the screen
@@ -1126,7 +1136,7 @@
 
         },
 
-        collectStar2: function(platplayer1, star) {
+        collectStar2: function (platplayer1, star) {
             {
                 audiocoin.play();
                 // Removes the star from the screen
@@ -1142,7 +1152,7 @@
                 //}
             }
         },
-        endTweenFleece: function() {
+        endTweenFleece: function () {
             fleece.y = 600;
             switch (waste1vast) {
                 case "p1":
@@ -1158,7 +1168,7 @@
             aantalplastic = 0;
             stoplicht1.frame = 0;
         },
-        endTweenKranten: function() {
+        endTweenKranten: function () {
             kranten.y = 600;
             switch (waste2vast) {
                 case "p1":
@@ -1174,7 +1184,7 @@
             aantalpapier = 0;
             stoplicht2.frame = 0;
         },
-        endTweenCompost: function() {
+        endTweenCompost: function () {
             compost.y = 600;
             switch (waste3vast) {
                 case "p1":
@@ -1191,7 +1201,7 @@
 
         },
 
-        collectWaste1: function(container, _waste) {
+        collectWaste1: function (container, _waste) {
             wastecollectedsound2.play();
             console.log(_waste.key);
             switch (_waste.key) {
@@ -1223,7 +1233,7 @@
 
                     waste1.kill();
                     waste1.body.gravity.y = 200;
-                    
+
                     wastecollected++;
                     break;
                 case "sspapier":
@@ -1244,7 +1254,7 @@
                     }
                     waste2.kill();
                     waste2.body.gravity.y = 200;
-                   
+
 
                     // tutorial
                     if (tutorial === true) {
@@ -1281,7 +1291,7 @@
                     }
                     waste3.kill();
                     waste3.body.gravity.y = 200;
-                   
+
                     wastecollected++;
                     stoplicht3.frame = aantaleten;
                     if (aantaleten === 3) {
@@ -1300,7 +1310,7 @@
 
 
 
-        checkscore: function() {
+        checkscore: function () {
             /*if (starsalive === 0) {
                 starsalive = 14;
                 this.createStars();
@@ -1308,7 +1318,7 @@
             }*/
 
         },
-        checkWasteCollected: function() {
+        checkWasteCollected: function () {
 
             console.log("wastecolledted = " + wastecollected);
 
@@ -1377,7 +1387,7 @@
 
 
         },
-        hitenemy: function(enemy, player) {
+        hitenemy: function (enemy, player) {
             audiohit.play();
             playerhit.play();
 
@@ -1420,16 +1430,16 @@
 
             //scoreTextp1.anchor.setTo(0.5, 0.5);
         },
-        minaway: function() {
+        minaway: function () {
             mintext.destroy();
             //
         },
-        fullaway: function() {
+        fullaway: function () {
             fulltext.destroy();
             //
         },
 
-        checklives: function(playerthis) {
+        checklives: function (playerthis) {
             switch (playerthis) {
                 case "crp1":
                     if (levens1 === 2) {
@@ -1528,14 +1538,14 @@
 
             }
         },
-        overDone: function() {
+        overDone: function () {
             this.game.state.start('score');
         },
 
 
 
 
-        createStars: function() {
+        createStars: function () {
             starsalive = 14;
             var randomy = this.game.rnd.integerInRange(-500, 400);
             //  Finally some stars to collect
@@ -1556,7 +1566,7 @@
             }
         },
 
-        createenemy1: function() {
+        createenemy1: function () {
 
             var randomy = this.game.rnd.integerInRange(-450, 450);
             var randomTimer = this.game.rnd.integerInRange(3000, 7000);
@@ -1586,7 +1596,7 @@
             this.game.time.events.add(randomTimer, this.createenemy1, this);
         },
 
-        createenemy2: function() {
+        createenemy2: function () {
 
 
             var randomy = this.game.rnd.integerInRange(-450, 450);
@@ -1620,10 +1630,10 @@
 
 
 
-        render: function() {
-            // this.game.debug.body(platplayer1);
-            // this.game.debug.body(waste2);
-            
+        render: function () {
+            this.game.debug.body(platplayer1);
+            this.game.debug.body(waste2);
+
 
         }
     };
